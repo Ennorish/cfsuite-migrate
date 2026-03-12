@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-validation-and-polish-03-01-PLAN.md
-last_updated: "2026-03-12T04:52:15.291Z"
+stopped_at: "Paused at checkpoint: 04-web-ui-04-01-PLAN.md Task 4 (human-verify)"
+last_updated: "2026-03-12T05:11:50.783Z"
 last_activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 progress:
   total_phases: 4
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  completed_phases: 4
+  total_plans: 8
+  completed_plans: 8
   percent: 60
 ---
 
@@ -57,6 +57,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-core-etl P02 | 203 | 2 tasks | 5 files |
 | Phase 02-core-etl P04 | 3 | 2 tasks | 3 files |
 | Phase 03-validation-and-polish P01 | 25 | 2 tasks | 4 files |
+| Phase 04-web-ui P01 | 3 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - [Phase 03-validation-and-polish]: on_progress callback uses (name, event, data) signature with start/{} and done/result events — composable and testable without side effects in pipeline.py
 - [Phase 03-validation-and-polish]: validate_results returns new list with match key added (not mutation) — keeps pipeline results immutable and test-friendly
 - [Phase 03-validation-and-polish]: Simple console.print for live output (not rich.progress.Progress) — readable in non-TTY environments and easier to test
+- [Phase 04-web-ui]: Buffer SSE events synchronously during run_migration then flush — avoids thread complexity while delivering live per-object progress
+- [Phase 04-web-ui]: Error paths return JSONResponse before streaming; frontend checks content-type to distinguish error vs SSE response
 
 ### Roadmap Evolution
 
@@ -101,6 +104,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-12T04:51:35.976Z
-Stopped at: Completed 03-validation-and-polish-03-01-PLAN.md
+Last session: 2026-03-12T05:11:50.780Z
+Stopped at: Paused at checkpoint: 04-web-ui-04-01-PLAN.md Task 4 (human-verify)
 Resume file: None
