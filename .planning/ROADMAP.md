@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project scaffold (pyproject.toml, uv) and SF CLI auth layer (list_orgs, get_credentials, production guard)
-- [ ] 01-02-PLAN.md — Interactive CLI prompts (org selection, object selection) wired to Typer entry point
+- [x] 01-01-PLAN.md — Project scaffold (pyproject.toml, uv) and SF CLI auth layer (list_orgs, get_credentials, production guard)
+- [x] 01-02-PLAN.md — Interactive CLI prompts (org selection, object selection) wired to Typer entry point
 
 ### Phase 2: Core ETL
 **Goal**: All four CFSuite objects migrate from source to target with record relationships intact, self-referential hierarchies preserved, and existing records in the target skipped
@@ -40,11 +40,17 @@ Plans:
 **Requirements**: DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06, DATA-07, DATA-08, DATA-09
 **Success Criteria** (what must be TRUE):
   1. Entitlements migrate before Request Flows, Request Flows before Community Requests, Community Requests before Preferred Comms Config — cross-object lookups resolve correctly
-  2. Request Flow self-referential hierarchy (Display Category → Category Journey → Case Assignment) arrives intact in the target org
-  3. Community Request parent-child hierarchy (Process → Question → Response) arrives intact in the target org with Parent_Question__c lookups correctly resolved
+  2. Request Flow self-referential hierarchy (Display Category -> Category Journey -> Case Assignment) arrives intact in the target org
+  3. Community Request parent-child hierarchy (Process -> Question -> Response) arrives intact in the target org with Parent_Question__c lookups correctly resolved
   4. Records already present in the target org are skipped — re-running the migration does not duplicate records
   5. Record Type IDs are mapped by DeveloperName — source IDs never reach the target org payload
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — ETL core engine (SF API wrapper, RecordType mapping, skip logic, two-pass insert)
+- [ ] 02-02-PLAN.md — Entitlement and Request Flow object migrators
+- [ ] 02-03-PLAN.md — Community Request and Preferred Comms Config object migrators
+- [ ] 02-04-PLAN.md — Pipeline orchestrator wiring all migrators into CLI with dependency ordering
 
 ### Phase 3: Validation and Polish
 **Goal**: Users receive confirmation that migration succeeded with record counts and real-time progress during the migration run
@@ -58,10 +64,10 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3
+Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
-| 2. Core ETL | 0/TBD | Not started | - |
+| 2. Core ETL | 0/4 | Not started | - |
 | 3. Validation and Polish | 0/TBD | Not started | - |
