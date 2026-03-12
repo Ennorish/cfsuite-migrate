@@ -1,5 +1,5 @@
 """Unit tests for migrate/etl.py — all Salesforce calls mocked."""
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 import pytest
 
