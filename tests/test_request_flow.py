@@ -23,22 +23,28 @@ class TestMigrateRequestFlows:
             {
                 "Name": "Flow-A",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": None,
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "Desc A",
-                "CFSuite__Order__c": 1,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": None,
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "Desc A",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Display Category",
             },
             {
                 "Name": "Flow-B",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": None,
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "Desc B",
-                "CFSuite__Order__c": 2,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": None,
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "Desc B",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Display Category",
             },
         ]
 
@@ -70,34 +76,40 @@ class TestMigrateRequestFlows:
     def test_self_referential_resolution(self, source_client, target_client):
         """Category Journey referencing Display Category is resolved in pass-2."""
         # Display Category record (no self-refs)
-        # Category Journey record referencing Display Category via CFSuite__Display_Category__c
+        # Category Journey record referencing Display Category via cfsuite1__Display_Category__c
         source_records = [
             {
                 "Id": "old-display-cat-id",
                 "Name": "Display Cat",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": None,
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "",
-                "CFSuite__Order__c": 1,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": None,
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Display Category",
             },
             {
                 "Id": "old-journey-id",
                 "Name": "Cat Journey",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": "old-display-cat-id",
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "",
-                "CFSuite__Order__c": 2,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": "old-display-cat-id",
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Category Journey",
             },
         ]
         # insert_records returns new IDs for inserted records
         insert_results = [{"id": "new-display-001"}, {"id": "new-journey-001"}]
-        # target_client.CFSuite__Request_Flow__c.update will be called for Cat Journey
+        # target_client.cfsuite1__CFSuite_Request_Flow__c.update will be called for Cat Journey
 
         with (
             patch("migrate.objects.request_flow.etl.extract_records", return_value=source_records),
@@ -113,15 +125,15 @@ class TestMigrateRequestFlows:
 
         # Pass 1: records inserted with self-ref fields set to None
         inserted_records = mock_insert.call_args[0][2]
-        assert inserted_records[0]["CFSuite__Display_Category__c"] is None
-        assert inserted_records[1]["CFSuite__Display_Category__c"] is None
+        assert inserted_records[0]["cfsuite1__Display_Category__c"] is None
+        assert inserted_records[1]["cfsuite1__Display_Category__c"] is None
 
-        # Pass 2: target_client.CFSuite__Request_Flow__c.update called for Cat Journey
-        sobject_obj = getattr(target_client, "CFSuite__Request_Flow__c")
-        # The Cat Journey's CFSuite__Display_Category__c should be updated to new-display-001
+        # Pass 2: target_client.cfsuite1__CFSuite_Request_Flow__c.update called for Cat Journey
+        sobject_obj = getattr(target_client, "cfsuite1__CFSuite_Request_Flow__c")
+        # The Cat Journey's cfsuite1__Display_Category__c should be updated to new-display-001
         sobject_obj.update.assert_called_once_with(
             "new-journey-001",
-            {"CFSuite__Display_Category__c": "new-display-001"},
+            {"cfsuite1__Display_Category__c": "new-display-001"},
         )
 
         assert result == {"extracted": 2, "skipped": 0, "inserted": 2}
@@ -132,22 +144,28 @@ class TestMigrateRequestFlows:
             {
                 "Name": "Flow-Existing",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": None,
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "",
-                "CFSuite__Order__c": 1,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": None,
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Display Category",
             },
             {
                 "Name": "Flow-New",
                 "RecordTypeId": "src-rt-001",
-                "CFSuite__Display_Category__c": None,
-                "CFSuite__Category_Journey__c": None,
-                "CFSuite__Active__c": True,
-                "CFSuite__Description__c": "",
-                "CFSuite__Order__c": 2,
-                "CFSuite__Entitlement_Name__c": "Ent-A",
+                "cfsuite1__Display_Category__c": None,
+                "cfsuite1__Category_Journey__c": None,
+                "cfsuite1__Entitlement_Process_Name__c": "Ent-A",
+                "cfsuite1__Case_Record_Type_Developer_Name__c": "Standard",
+                "cfsuite1__Case_Status__c": "New",
+                "cfsuite1__Help_Text__c": "",
+                "cfsuite1__Is_Primary__c": True,
+                "cfsuite1__Is_Hidden_From_Community__c": False,
+                "cfsuite1__Category_Type__c": "Display Category",
             },
         ]
 

@@ -4,25 +4,28 @@ from simple_salesforce import Salesforce
 import migrate.etl as etl
 import migrate.sf_api as sf_api
 
-_SOBJECT = "CFSuite__Request_Flow__c"
+_SOBJECT = "cfsuite1__CFSuite_Request_Flow__c"
 # Include Id so we can build a source_id -> name map for self-ref resolution.
 # Id is stripped before insert (Salesforce rejects it as a non-writable field).
 _FIELDS = [
     "Id",
     "Name",
     "RecordTypeId",
-    "CFSuite__Display_Category__c",
-    "CFSuite__Category_Journey__c",
-    "CFSuite__Active__c",
-    "CFSuite__Description__c",
-    "CFSuite__Order__c",
-    "CFSuite__Entitlement_Name__c",
+    "cfsuite1__Display_Category__c",
+    "cfsuite1__Category_Journey__c",
+    "cfsuite1__Entitlement_Process_Name__c",
+    "cfsuite1__Case_Record_Type_Developer_Name__c",
+    "cfsuite1__Case_Status__c",
+    "cfsuite1__Help_Text__c",
+    "cfsuite1__Is_Primary__c",
+    "cfsuite1__Is_Hidden_From_Community__c",
+    "cfsuite1__Category_Type__c",
 ]
-_SELF_REF_FIELDS = ["CFSuite__Display_Category__c", "CFSuite__Category_Journey__c"]
+_SELF_REF_FIELDS = ["cfsuite1__Display_Category__c", "cfsuite1__Category_Journey__c"]
 
 
 def migrate_request_flows(source_client: Salesforce, target_client: Salesforce) -> dict:
-    """Extract CFSuite__Request_Flow__c records from source and insert into target.
+    """Extract cfsuite1__CFSuite_Request_Flow__c records from source and insert into target.
 
     Steps:
     1. Extract records (including Id) from source.

@@ -1,16 +1,19 @@
-"""Migrator for CFSuite__Preferred_Comms_Config__c records."""
+"""Migrator for cfsuite1__CFSuite_Preferred_Comms_Config__c records."""
 from simple_salesforce import Salesforce
 
 from migrate import etl, sf_api
 
-SOBJECT = "CFSuite__Preferred_Comms_Config__c"
+SOBJECT = "cfsuite1__CFSuite_Preferred_Comms_Config__c"
 FIELDS = [
     "Name",
     "RecordTypeId",
-    "CFSuite__Active__c",
-    "CFSuite__Description__c",
-    "CFSuite__Channel__c",
-    "CFSuite__Priority__c",
+    "cfsuite1__Active__c",
+    "cfsuite1__Description__c",
+    "cfsuite1__Events__c",
+    "cfsuite1__Included_Categories__c",
+    "cfsuite1__Excluded_Categories__c",
+    "cfsuite1__Record_Type_Names__c",
+    "cfsuite1__Status__c",
 ]
 
 

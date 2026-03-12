@@ -15,35 +15,56 @@ SOURCE_RECORDS = [
     {
         "Name": "Flow A",
         "RecordTypeId": "012src1",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": "src-rf-001",
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": "desc",
-        "CFSuite__Order__c": 1,
-        "CFSuite__Question_Text__c": None,
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": "src-rf-001",
+        "cfsuite1__Sort_Order__c": 1,
+        "cfsuite1__Question__c": None,
+        "cfsuite1__Category__c": "Service",
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": "Flow A Process",
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     },
     {
         "Name": "Flow B",
         "RecordTypeId": "012src1",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": "src-rf-001",
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": "desc2",
-        "CFSuite__Order__c": 2,
-        "CFSuite__Question_Text__c": None,
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": "src-rf-001",
+        "cfsuite1__Sort_Order__c": 2,
+        "cfsuite1__Question__c": None,
+        "cfsuite1__Category__c": "Service",
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": "Flow B Process",
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     },
     {
         "Name": "Flow C",
         "RecordTypeId": "012src2",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": None,
-        "CFSuite__Active__c": False,
-        "CFSuite__Description__c": None,
-        "CFSuite__Order__c": 3,
-        "CFSuite__Question_Text__c": "Q?",
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": None,
+        "cfsuite1__Sort_Order__c": 3,
+        "cfsuite1__Question__c": "Q?",
+        "cfsuite1__Category__c": None,
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": None,
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     },
 ]
 
@@ -105,24 +126,38 @@ def test_self_referential_resolution():
     process_rec = {
         "Name": "Process 1",
         "RecordTypeId": "012src1",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": None,
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": None,
-        "CFSuite__Order__c": 1,
-        "CFSuite__Question_Text__c": None,
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": None,
+        "cfsuite1__Sort_Order__c": 1,
+        "cfsuite1__Question__c": None,
+        "cfsuite1__Category__c": None,
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": "Process 1",
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     }
     question_rec = {
         "Name": "Question 1",
         "RecordTypeId": "012src2",
-        "CFSuite__Parent_Question__c": "Process 1",
-        "CFSuite__Request_Flow__c": None,
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": None,
-        "CFSuite__Order__c": 1,
-        "CFSuite__Question_Text__c": "Q?",
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": "Process 1",
+        "cfsuite1__CFSuite_Request_Flow__c": None,
+        "cfsuite1__Sort_Order__c": 1,
+        "cfsuite1__Question__c": "Q?",
+        "cfsuite1__Category__c": None,
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": None,
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     }
 
     with (
@@ -172,13 +207,20 @@ def test_cross_object_lookup_resolves_by_name():
     record = {
         "Name": "CR 1",
         "RecordTypeId": "012src1",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": "src-rf-001",
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": None,
-        "CFSuite__Order__c": 1,
-        "CFSuite__Question_Text__c": None,
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": "src-rf-001",
+        "cfsuite1__Sort_Order__c": 1,
+        "cfsuite1__Question__c": None,
+        "cfsuite1__Category__c": None,
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": None,
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     }
 
     with (
@@ -210,7 +252,7 @@ def test_cross_object_lookup_resolves_by_name():
 
         # The inserted record should have target RF Id
         assert len(captured_records) == 1
-        assert captured_records[0]["CFSuite__Request_Flow__c"] == "tgt-rf-999"
+        assert captured_records[0]["cfsuite1__CFSuite_Request_Flow__c"] == "tgt-rf-999"
 
 
 # ---------------------------------------------------------------------------
@@ -226,13 +268,20 @@ def test_cross_object_lookup_miss_sets_none():
     record = {
         "Name": "CR Missing",
         "RecordTypeId": "012src1",
-        "CFSuite__Parent_Question__c": None,
-        "CFSuite__Request_Flow__c": "src-rf-unknown",
-        "CFSuite__Active__c": True,
-        "CFSuite__Description__c": None,
-        "CFSuite__Order__c": 1,
-        "CFSuite__Question_Text__c": None,
-        "CFSuite__Response_Value__c": None,
+        "cfsuite1__Parent_Question__c": None,
+        "cfsuite1__CFSuite_Request_Flow__c": "src-rf-unknown",
+        "cfsuite1__Sort_Order__c": 1,
+        "cfsuite1__Question__c": None,
+        "cfsuite1__Category__c": None,
+        "cfsuite1__Contact_Form_Type__c": None,
+        "cfsuite1__Guided_Request_Process_Name__c": None,
+        "cfsuite1__isDeflection__c": False,
+        "cfsuite1__Deflection_Text__c": None,
+        "cfsuite1__Deflection_URL__c": None,
+        "cfsuite1__Allow_Anonymous_Submission__c": False,
+        "cfsuite1__Search_Title__c": None,
+        "cfsuite1__Search_Tag__c": None,
+        "cfsuite1__Next_Step__c": None,
     }
 
     with (
@@ -266,7 +315,7 @@ def test_cross_object_lookup_miss_sets_none():
         result = community_request.migrate_community_requests(source_client, target_client)
 
         assert result["inserted"] == 1
-        assert captured_records[0]["CFSuite__Request_Flow__c"] is None
+        assert captured_records[0]["cfsuite1__CFSuite_Request_Flow__c"] is None
 
 
 # ---------------------------------------------------------------------------

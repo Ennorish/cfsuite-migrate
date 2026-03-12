@@ -1,33 +1,40 @@
-"""Migrator for CFSuite__Data_Settings__c (Community Request) records."""
+"""Migrator for cfsuite1__Data_Settings__c (Community Request) records."""
 from simple_salesforce import Salesforce
 
 from migrate import etl, sf_api
 
-SOBJECT = "CFSuite__Data_Settings__c"
+SOBJECT = "cfsuite1__Data_Settings__c"
 FIELDS = [
     "Name",
     "RecordTypeId",
-    "CFSuite__Parent_Question__c",
-    "CFSuite__Request_Flow__c",
-    "CFSuite__Active__c",
-    "CFSuite__Description__c",
-    "CFSuite__Order__c",
-    "CFSuite__Question_Text__c",
-    "CFSuite__Response_Value__c",
+    "cfsuite1__Parent_Question__c",
+    "cfsuite1__CFSuite_Request_Flow__c",
+    "cfsuite1__Sort_Order__c",
+    "cfsuite1__Question__c",
+    "cfsuite1__Category__c",
+    "cfsuite1__Contact_Form_Type__c",
+    "cfsuite1__Guided_Request_Process_Name__c",
+    "cfsuite1__isDeflection__c",
+    "cfsuite1__Deflection_Text__c",
+    "cfsuite1__Deflection_URL__c",
+    "cfsuite1__Allow_Anonymous_Submission__c",
+    "cfsuite1__Search_Title__c",
+    "cfsuite1__Search_Tag__c",
+    "cfsuite1__Next_Step__c",
 ]
-SELF_REF_FIELD = "CFSuite__Parent_Question__c"
-CROSS_REF_FIELD = "CFSuite__Request_Flow__c"
+SELF_REF_FIELD = "cfsuite1__Parent_Question__c"
+CROSS_REF_FIELD = "cfsuite1__CFSuite_Request_Flow__c"
 
 
 def migrate_community_requests(
     source_client: Salesforce, target_client: Salesforce
 ) -> dict:
-    """Migrate CFSuite__Data_Settings__c records from source to target org.
+    """Migrate cfsuite1__Data_Settings__c records from source to target org.
 
     Steps:
     1. Extract all records from source.
     2. Remap RecordTypeIds by DeveloperName.
-    3. Resolve cross-object CFSuite__Request_Flow__c lookup by Name matching.
+    3. Resolve cross-object cfsuite1__CFSuite_Request_Flow__c lookup by Name matching.
     4. Skip records already present in target (matched by Name).
     5. Insert remaining records via two-pass insert to resolve Parent_Question__c.
 
@@ -71,7 +78,7 @@ def _resolve_request_flow_lookup(
     source_client: Salesforce,
     target_client: Salesforce,
 ) -> None:
-    """Resolve CFSuite__Request_Flow__c from source Id to target Id via Name matching.
+    """Resolve cfsuite1__CFSuite_Request_Flow__c from source Id to target Id via Name matching.
 
     For each record with a non-null CROSS_REF_FIELD:
     - Query source to get Request Flow Names for those Ids.
@@ -94,14 +101,14 @@ def _resolve_request_flow_lookup(
     ids_in = ", ".join(f"'{i}'" for i in source_rf_ids)
     source_rf_records = sf_api.query_all(
         source_client,
-        f"SELECT Id, Name FROM CFSuite__Request_Flow__c WHERE Id IN ({ids_in})",
+        f"SELECT Id, Name FROM cfsuite1__CFSuite_Request_Flow__c WHERE Id IN ({ids_in})",
     )
     source_id_to_name: dict[str, str] = {r["Id"]: r["Name"] for r in source_rf_records}
 
     # Query target for all RF Name -> Id
     target_rf_records = sf_api.query_all(
         target_client,
-        "SELECT Id, Name FROM CFSuite__Request_Flow__c",
+        "SELECT Id, Name FROM cfsuite1__CFSuite_Request_Flow__c",
     )
     target_name_to_id: dict[str, str] = {r["Name"]: r["Id"] for r in target_rf_records}
 
