@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-core-etl-02-02-PLAN.md
-last_updated: "2026-03-12T04:17:24.096Z"
+stopped_at: Completed 02-core-etl-02-04-PLAN.md
+last_updated: "2026-03-12T04:21:52.761Z"
 last_activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 60
 ---
 
@@ -55,6 +55,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-core-etl P01 | 20 | 2 tasks | 4 files |
 | Phase 02-core-etl P03 | 3 | 2 tasks | 5 files |
 | Phase 02-core-etl P02 | 203 | 2 tasks | 5 files |
+| Phase 02-core-etl P04 | 3 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,7 @@ Recent decisions affecting current work:
 - [Phase 02-core-etl]: None fallback (not error) when target RF missing — allows partial migrations without blocking the whole run
 - [Phase 02-core-etl]: Include Id in request_flow FIELDS to build source_id->name map for self-ref resolution; Id stripped before insert
 - [Phase 02-core-etl]: Custom two-pass flow for request_flow (not etl.two_pass_insert) — two self-ref fields handled with single pass-1 insert then collected pass-2 updates per record
+- [Phase 02-core-etl]: Patch migrate.pipeline.OBJECT_MIGRATORS in tests (not module functions) - function refs are bound at import time in list-of-tuples
 
 ### Pending Todos
 
@@ -91,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T04:17:24.094Z
-Stopped at: Completed 02-core-etl-02-02-PLAN.md
+Last session: 2026-03-12T04:21:52.756Z
+Stopped at: Completed 02-core-etl-02-04-PLAN.md
 Resume file: None
