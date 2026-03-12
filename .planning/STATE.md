@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-core-etl-02-04-PLAN.md
-last_updated: "2026-03-12T04:22:27.147Z"
+stopped_at: Completed 03-validation-and-polish-03-01-PLAN.md
+last_updated: "2026-03-12T04:51:35.978Z"
 last_activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 progress:
-  total_phases: 3
-  completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_phases: 4
+  completed_phases: 3
+  total_plans: 7
+  completed_plans: 7
   percent: 60
 ---
 
@@ -56,6 +56,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-core-etl P03 | 3 | 2 tasks | 5 files |
 | Phase 02-core-etl P02 | 203 | 2 tasks | 5 files |
 | Phase 02-core-etl P04 | 3 | 2 tasks | 3 files |
+| Phase 03-validation-and-polish P01 | 25 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase 02-core-etl]: Include Id in request_flow FIELDS to build source_id->name map for self-ref resolution; Id stripped before insert
 - [Phase 02-core-etl]: Custom two-pass flow for request_flow (not etl.two_pass_insert) — two self-ref fields handled with single pass-1 insert then collected pass-2 updates per record
 - [Phase 02-core-etl]: Patch migrate.pipeline.OBJECT_MIGRATORS in tests (not module functions) - function refs are bound at import time in list-of-tuples
+- [Phase 03-validation-and-polish]: on_progress callback uses (name, event, data) signature with start/{} and done/result events — composable and testable without side effects in pipeline.py
+- [Phase 03-validation-and-polish]: validate_results returns new list with match key added (not mutation) — keeps pipeline results immutable and test-friendly
+- [Phase 03-validation-and-polish]: Simple console.print for live output (not rich.progress.Progress) — readable in non-TTY environments and easier to test
 
 ### Roadmap Evolution
 
@@ -97,6 +101,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-12T04:21:52.756Z
-Stopped at: Completed 02-core-etl-02-04-PLAN.md
+Last session: 2026-03-12T04:51:35.976Z
+Stopped at: Completed 03-validation-and-polish-03-01-PLAN.md
 Resume file: None

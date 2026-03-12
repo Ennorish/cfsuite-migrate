@@ -11,7 +11,7 @@
 - [x] **CLI-02**: User can select target org from SF CLI authenticated orgs via interactive prompt
 - [x] **CLI-03**: User can add a new org by being shown the `sf org login web` command to run
 - [x] **CLI-04**: User can select individual objects to migrate or choose "all"
-- [ ] **CLI-05**: User sees progress output during migration (object being processed, record counts)
+- [x] **CLI-05**: User sees progress output during migration (object being processed, record counts)
 
 ### Authentication & Safety
 
@@ -32,7 +32,7 @@
 
 ### Validation
 
-- [ ] **VAL-01**: Post-migration record count comparison (source extracted vs target inserted + skipped)
+- [x] **VAL-01**: Post-migration record count comparison (source extracted vs target inserted + skipped)
 
 ## v2 Requirements
 
@@ -68,7 +68,7 @@
 | CLI-02 | Phase 1 | Complete |
 | CLI-03 | Phase 1 | Complete |
 | CLI-04 | Phase 1 | Complete |
-| CLI-05 | Phase 3 | Pending |
+| CLI-05 | Phase 3 | Complete |
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
 | DATA-01 | Phase 2 | Complete |
@@ -80,7 +80,7 @@
 | DATA-07 | Phase 2 | Complete |
 | DATA-08 | Phase 2 | Complete |
 | DATA-09 | Phase 2 | Complete |
-| VAL-01 | Phase 3 | Pending |
+| VAL-01 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 17 total
