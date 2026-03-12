@@ -88,8 +88,8 @@ def test_insert_records_delegates_to_bulk():
         {"id": "0011", "success": True},
         {"id": "0012", "success": True},
     ]
-    # Support getattr(client.bulk, sobject)
-    client.bulk.__getattr__ = MagicMock(return_value=fake_bulk_obj)
+    # MagicMock attribute access returns a child mock; set Account on client.bulk
+    client.bulk.Account = fake_bulk_obj
 
     records = [{"Name": "A"}, {"Name": "B"}]
     results = sf_api.insert_records(client, "Account", records)
