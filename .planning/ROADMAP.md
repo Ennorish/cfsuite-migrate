@@ -60,7 +60,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. During migration, user sees live output showing which object is being processed and how many records have been inserted
   2. After migration completes, user sees a per-object record count comparison (source extracted vs target inserted + skipped) that confirms no records were silently lost
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 03-01-PLAN.md — Progress callback in pipeline, rich live output, and post-migration validation summary table
 
 ## Progress
 
@@ -71,7 +74,7 @@ Phases execute in numeric order: 1 -> 2 -> 3
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
 | 2. Core ETL | 4/4 | Complete | 2026-03-12 |
-| 3. Validation and Polish | 0/TBD | Not started | - |
+| 3. Validation and Polish | 0/1 | Not started | - |
 | 4. Web UI | 0/TBD | Not started | - |
 
 ### Phase 4: Web UI
