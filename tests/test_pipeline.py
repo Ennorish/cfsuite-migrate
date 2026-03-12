@@ -13,6 +13,12 @@ def mock_clients():
     return source, target
 
 
+def _make_migrators(results):
+    """Return four MagicMock migrators with configured return values."""
+    mocks = [MagicMock(return_value=r) for r in results]
+    return mocks
+
+
 class TestRunMigrationAllObjects:
     """All four objects selected: all migrators called in dependency order."""
 
@@ -30,24 +36,15 @@ class TestRunMigrationAllObjects:
             {"extracted": 7, "skipped": 2, "inserted": 5},
             {"extracted": 4, "skipped": 0, "inserted": 4},
         ]
-        with (
-            patch(
-                "migrate.objects.entitlement.migrate_entitlements",
-                return_value=fake_results[0],
-            ) as mock_ent,
-            patch(
-                "migrate.objects.request_flow.migrate_request_flows",
-                return_value=fake_results[1],
-            ) as mock_rf,
-            patch(
-                "migrate.objects.community_request.migrate_community_requests",
-                return_value=fake_results[2],
-            ) as mock_cr,
-            patch(
-                "migrate.objects.preferred_comms.migrate_preferred_comms",
-                return_value=fake_results[3],
-            ) as mock_pc,
-        ):
+        mock_ent, mock_rf, mock_cr, mock_pc = _make_migrators(fake_results)
+        patched_migrators = [
+            ("Entitlement", mock_ent),
+            ("CFSuite Request Flow", mock_rf),
+            ("CFSuite Community Request", mock_cr),
+            ("CFSuite Preferred Comms Config", mock_pc),
+        ]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched_migrators):
             results = run_migration(source, target, all_objects)
 
         mock_ent.assert_called_once_with(source, target)
@@ -69,24 +66,21 @@ class TestRunMigrationAllObjects:
             "CFSuite Community Request",
             "CFSuite Preferred Comms Config",
         ]
-        with (
-            patch(
-                "migrate.objects.entitlement.migrate_entitlements",
-                return_value={"extracted": 10, "skipped": 2, "inserted": 8},
-            ),
-            patch(
-                "migrate.objects.request_flow.migrate_request_flows",
-                return_value={"extracted": 6, "skipped": 3, "inserted": 3},
-            ),
-            patch(
-                "migrate.objects.community_request.migrate_community_requests",
-                return_value={"extracted": 0, "skipped": 0, "inserted": 0},
-            ),
-            patch(
-                "migrate.objects.preferred_comms.migrate_preferred_comms",
-                return_value={"extracted": 2, "skipped": 2, "inserted": 0},
-            ),
-        ):
+        fake_results = [
+            {"extracted": 10, "skipped": 2, "inserted": 8},
+            {"extracted": 6, "skipped": 3, "inserted": 3},
+            {"extracted": 0, "skipped": 0, "inserted": 0},
+            {"extracted": 2, "skipped": 2, "inserted": 0},
+        ]
+        mock_ent, mock_rf, mock_cr, mock_pc = _make_migrators(fake_results)
+        patched_migrators = [
+            ("Entitlement", mock_ent),
+            ("CFSuite Request Flow", mock_rf),
+            ("CFSuite Community Request", mock_cr),
+            ("CFSuite Preferred Comms Config", mock_pc),
+        ]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched_migrators):
             results = run_migration(source, target, all_objects)
 
         assert results[0]["extracted"] == 10
@@ -99,23 +93,20 @@ class TestRunMigrationSubsetObjects:
 
     def test_entitlement_and_preferred_comms_only(self, mock_clients):
         source, target = mock_clients
-        selected = ["CFSuite Preferred Comms Config", "Entitlement"]  # reversed order in input
-        with (
-            patch(
-                "migrate.objects.entitlement.migrate_entitlements",
-                return_value={"extracted": 2, "skipped": 0, "inserted": 2},
-            ) as mock_ent,
-            patch(
-                "migrate.objects.request_flow.migrate_request_flows",
-            ) as mock_rf,
-            patch(
-                "migrate.objects.community_request.migrate_community_requests",
-            ) as mock_cr,
-            patch(
-                "migrate.objects.preferred_comms.migrate_preferred_comms",
-                return_value={"extracted": 3, "skipped": 1, "inserted": 2},
-            ) as mock_pc,
-        ):
+        # Input order is reversed from dependency order — pipeline must sort by OBJECT_MIGRATORS order
+        selected = ["CFSuite Preferred Comms Config", "Entitlement"]
+        mock_ent = MagicMock(return_value={"extracted": 2, "skipped": 0, "inserted": 2})
+        mock_rf = MagicMock()
+        mock_cr = MagicMock()
+        mock_pc = MagicMock(return_value={"extracted": 3, "skipped": 1, "inserted": 2})
+        patched_migrators = [
+            ("Entitlement", mock_ent),
+            ("CFSuite Request Flow", mock_rf),
+            ("CFSuite Community Request", mock_cr),
+            ("CFSuite Preferred Comms Config", mock_pc),
+        ]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched_migrators):
             results = run_migration(source, target, selected)
 
         mock_ent.assert_called_once_with(source, target)
@@ -131,21 +122,18 @@ class TestRunMigrationSubsetObjects:
     def test_only_community_request(self, mock_clients):
         source, target = mock_clients
         selected = ["CFSuite Community Request"]
-        with (
-            patch(
-                "migrate.objects.entitlement.migrate_entitlements",
-            ) as mock_ent,
-            patch(
-                "migrate.objects.request_flow.migrate_request_flows",
-            ) as mock_rf,
-            patch(
-                "migrate.objects.community_request.migrate_community_requests",
-                return_value={"extracted": 5, "skipped": 0, "inserted": 5},
-            ) as mock_cr,
-            patch(
-                "migrate.objects.preferred_comms.migrate_preferred_comms",
-            ) as mock_pc,
-        ):
+        mock_ent = MagicMock()
+        mock_rf = MagicMock()
+        mock_cr = MagicMock(return_value={"extracted": 5, "skipped": 0, "inserted": 5})
+        mock_pc = MagicMock()
+        patched_migrators = [
+            ("Entitlement", mock_ent),
+            ("CFSuite Request Flow", mock_rf),
+            ("CFSuite Community Request", mock_cr),
+            ("CFSuite Preferred Comms Config", mock_pc),
+        ]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched_migrators):
             results = run_migration(source, target, selected)
 
         mock_ent.assert_not_called()
@@ -163,20 +151,18 @@ class TestRunMigrationEmptyList:
 
     def test_empty_objects_list(self, mock_clients):
         source, target = mock_clients
-        with (
-            patch(
-                "migrate.objects.entitlement.migrate_entitlements",
-            ) as mock_ent,
-            patch(
-                "migrate.objects.request_flow.migrate_request_flows",
-            ) as mock_rf,
-            patch(
-                "migrate.objects.community_request.migrate_community_requests",
-            ) as mock_cr,
-            patch(
-                "migrate.objects.preferred_comms.migrate_preferred_comms",
-            ) as mock_pc,
-        ):
+        mock_ent = MagicMock()
+        mock_rf = MagicMock()
+        mock_cr = MagicMock()
+        mock_pc = MagicMock()
+        patched_migrators = [
+            ("Entitlement", mock_ent),
+            ("CFSuite Request Flow", mock_rf),
+            ("CFSuite Community Request", mock_cr),
+            ("CFSuite Preferred Comms Config", mock_pc),
+        ]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched_migrators):
             results = run_migration(source, target, [])
 
         mock_ent.assert_not_called()
