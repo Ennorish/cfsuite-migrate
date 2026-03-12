@@ -1,10 +1,11 @@
 """Typer CLI entry point for cfsuite-migrate."""
 import typer
 from rich.console import Console
+from rich.table import Table
 
 from migrate.auth import assert_not_production, get_credentials, list_orgs
 from migrate.models import ProductionOrgError, SFCLINotFoundError
-from migrate.pipeline import run_migration
+from migrate.pipeline import run_migration, validate_results
 from migrate.prompts import select_objects, select_source_org, select_target_org
 from migrate.sf_api import build_client
 
@@ -68,20 +69,69 @@ def migrate(
         source_client = build_client(source_creds)
         target_client = build_client(target_creds)
 
-        # Run migration pipeline
+        # Run migration pipeline with live per-object progress
         console.print("\n[bold]Starting migration...[/bold]\n")
-        results = run_migration(source_client, target_client, objects_to_migrate)
 
-        # Display results
+        def on_progress(name, event, data):
+            if event == "start":
+                console.print(f"  [cyan]Migrating {name}...[/cyan]")
+            elif event == "done":
+                console.print(
+                    f"  [green]{name}:[/green] {data['extracted']} extracted, "
+                    f"{data['skipped']} skipped, {data['inserted']} inserted"
+                )
+
+        results = run_migration(source_client, target_client, objects_to_migrate, on_progress=on_progress)
+
+        # Display validation summary table
         console.print("\n[bold green]Migration complete![/bold green]\n")
-        for r in results:
-            console.print(
-                f"  {r['object']}: {r['extracted']} extracted, "
-                f"{r['skipped']} skipped, {r['inserted']} inserted"
+        validated = validate_results(results)
+
+        table = Table(title="Migration Summary")
+        table.add_column("Object", style="bold")
+        table.add_column("Extracted", justify="right")
+        table.add_column("Skipped", justify="right")
+        table.add_column("Inserted", justify="right")
+        table.add_column("Status", justify="center")
+
+        total_extracted = total_skipped = total_inserted = 0
+        for r in validated:
+            status = "[green]OK[/green]" if r["match"] else "[red]MISMATCH[/red]"
+            table.add_row(
+                r["object"],
+                str(r["extracted"]),
+                str(r["skipped"]),
+                str(r["inserted"]),
+                status,
             )
+            total_extracted += r["extracted"]
+            total_skipped += r["skipped"]
+            total_inserted += r["inserted"]
+
+        table.add_section()
+        table.add_row(
+            "[bold]TOTAL[/bold]",
+            f"[bold]{total_extracted}[/bold]",
+            f"[bold]{total_skipped}[/bold]",
+            f"[bold]{total_inserted}[/bold]",
+            "",
+        )
+
+        console.print(table)
     except Exception as e:
         console.print(f"\n[red]Migration failed:[/red] {e}")
         raise typer.Exit(1)
+
+
+@app.command()
+def serve(
+    port: int = typer.Option(8765, "--port", "-p", help="Port for the web UI"),
+) -> None:
+    """Launch the web UI in your browser."""
+    from migrate.web import serve as start_server
+
+    console.print(f"[green]Starting web UI at http://localhost:{port}[/green]")
+    start_server(port=port)
 
 
 def main() -> None:
