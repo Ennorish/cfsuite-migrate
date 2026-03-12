@@ -1,8 +1,6 @@
 """Unit tests for migrate/objects/community_request.py — all SF calls mocked."""
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from migrate.objects import community_request
 
 
