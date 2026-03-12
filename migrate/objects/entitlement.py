@@ -4,7 +4,8 @@ from simple_salesforce import Salesforce
 import migrate.etl as etl
 import migrate.sf_api as sf_api
 
-_FIELDS = ["Name", "AccountId", "StartDate", "EndDate", "Status", "Type"]
+# Status is a non-writable system field — excluded from insert.
+_FIELDS = ["Name", "AccountId", "StartDate", "EndDate", "Type"]
 _SOBJECT = "Entitlement"
 
 
@@ -12,8 +13,7 @@ def migrate_entitlements(source_client: Salesforce, target_client: Salesforce) -
     """Extract Entitlement records from source and insert into target, skipping existing.
 
     Skips records whose Name already exists in target (idempotent).
-    AccountId is carried over as-is — both orgs share the same Account names in
-    CFSuite sandbox setup.
+    AccountId is resolved by Account Name matching across orgs.
 
     Returns:
         dict with keys: extracted (int), skipped (int), inserted (int)
@@ -22,6 +22,9 @@ def migrate_entitlements(source_client: Salesforce, target_client: Salesforce) -
 
     if not records:
         return {"extracted": 0, "skipped": 0, "inserted": 0}
+
+    # Resolve AccountId: source Account Id -> Account Name -> target Account Id
+    _resolve_account_ids(records, source_client, target_client)
 
     existing = etl.find_existing_keys(
         target_client, _SOBJECT, "Name", [r["Name"] for r in records]
@@ -36,3 +39,32 @@ def migrate_entitlements(source_client: Salesforce, target_client: Salesforce) -
         "skipped": len(existing),
         "inserted": len(to_insert),
     }
+
+
+def _resolve_account_ids(
+    records: list[dict],
+    source_client: Salesforce,
+    target_client: Salesforce,
+) -> None:
+    """Map all Entitlements to a single Account in target, created from source org name.
+
+    Looks up the source org's Organization Name, finds or creates an Account with
+    that name in the target, and sets all records' AccountId to it.
+    """
+    # Get source org name
+    org_info = sf_api.query_all(source_client, "SELECT Name FROM Organization LIMIT 1")
+    org_name = org_info[0]["Name"] if org_info else "CFSuite Migration Account"
+
+    # Find or create the account in target
+    existing = sf_api.query_all(
+        target_client, f"SELECT Id FROM Account WHERE Name = '{org_name}' LIMIT 1"
+    )
+    if existing:
+        account_id = existing[0]["Id"]
+    else:
+        result = target_client.Account.create({"Name": org_name})
+        account_id = result["id"]
+
+    # Set all records to this single account
+    for record in records:
+        record["AccountId"] = account_id

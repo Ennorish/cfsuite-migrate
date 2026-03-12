@@ -42,6 +42,8 @@
     .trigger-selected { display: flex; align-items: center; gap: 8px; }
     .trigger-selected .org-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 8px; text-transform: uppercase; }
 
+    .selected-username { font-size: 0.75rem; color: #94a3b8; margin-top: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
     /* Step 1: Side-by-side org layout */
     .step-orgs { display: flex; align-items: center; gap: 16px; }
     .org-col { flex: 1; min-width: 0; }
@@ -268,6 +270,14 @@
         <span class="org-badge ${badgeClass}">${badgeText}</span>
       </div>
       <span class="arrow">&#9660;</span>`;
+    // Show username below the picklist
+    let usernameEl = trigger.parentElement.querySelector('.selected-username');
+    if (!usernameEl) {
+      usernameEl = document.createElement('div');
+      usernameEl.className = 'selected-username';
+      trigger.parentElement.after(usernameEl);
+    }
+    usernameEl.textContent = org.username;
   }
 
   // -- Init picklists --
@@ -428,14 +438,21 @@
                 resultsArea.classList.remove('hidden');
                 let html = '<div class="success-banner">Migration Complete</div><div class="results">';
                 (evt.results || []).forEach(r => {
-                  html += `<div class="result-item">
-                    <span class="name">${r.object}</span>
-                    <span class="stats">
-                      <span>${r.extracted} extracted</span>
-                      <span class="skipped">${r.skipped} skipped</span>
-                      <span class="inserted">${r.inserted} inserted</span>
-                    </span>
-                  </div>`;
+                  if (r.error) {
+                    html += `<div class="result-item" style="border-left:3px solid #f87171">
+                      <span class="name">${r.object}</span>
+                      <span class="stats" style="color:#f87171">Error: ${r.error.split('.')[0]}</span>
+                    </div>`;
+                  } else {
+                    html += `<div class="result-item">
+                      <span class="name">${r.object}</span>
+                      <span class="stats">
+                        <span>${r.extracted} extracted</span>
+                        <span class="skipped">${r.skipped} skipped</span>
+                        <span class="inserted">${r.inserted} inserted</span>
+                      </span>
+                    </div>`;
+                  }
                 });
                 html += '</div>';
                 resultsContent.innerHTML = html;

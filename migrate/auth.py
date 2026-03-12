@@ -4,6 +4,26 @@ import subprocess
 from migrate.models import Credentials, OrgInfo, ProductionOrgError, SFCLINotFoundError
 
 
+def _is_sandbox_url(instance_url: str) -> bool:
+    """Detect sandbox/scratch orgs by instance URL pattern."""
+    url = (instance_url or "").lower()
+    return ".sandbox." in url or ".scratch." in url or "--" in url
+
+
+def _get_alias_map() -> dict[str, str]:
+    """Return username -> alias mapping from sf alias registry."""
+    result = subprocess.run(
+        ["sf", "alias", "list", "--json"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return {}
+    data = json.loads(result.stdout)
+    return {entry["value"]: entry["alias"] for entry in data.get("result", [])}
+
+
 def list_orgs() -> list[OrgInfo]:
     """Return all orgs authenticated with SF CLI."""
     try:
@@ -18,17 +38,26 @@ def list_orgs() -> list[OrgInfo]:
             "sf CLI not found. Install from: https://developer.salesforce.com/tools/salesforcecli"
         )
     data = json.loads(result.stdout)
+    alias_map = _get_alias_map()
     all_orgs = data.get("result", {}).get("nonScratchOrgs", []) + data.get(
         "result", {}
     ).get("scratchOrgs", [])
-    return [
-        OrgInfo(
-            alias=org.get("alias", org["username"]),
-            username=org["username"],
-            is_sandbox=org.get("isSandbox", False),
+    seen = set()
+    org_list = []
+    for org in all_orgs:
+        username = org["username"]
+        alias = alias_map.get(username, org.get("alias", username))
+        if alias in seen:
+            continue
+        seen.add(alias)
+        org_list.append(
+            OrgInfo(
+                alias=alias,
+                username=username,
+                is_sandbox=_is_sandbox_url(org.get("instanceUrl", "")),
+            )
         )
-        for org in all_orgs
-    ]
+    return org_list
 
 
 def get_credentials(alias: str) -> Credentials:

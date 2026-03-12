@@ -1,5 +1,6 @@
 """Local web UI for CFSuite migration tool."""
 import json
+import queue
 import threading
 import webbrowser
 from dataclasses import asdict
@@ -79,31 +80,28 @@ def do_migrate(payload: dict):
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
-    # Stream SSE progress events
-    def event_stream():
-        progress_events = []
+    # Stream SSE progress events in real-time using a queue
+    q = queue.Queue()
 
-        def on_progress(name, event, data):
-            if event == "start":
-                progress_events.append(
-                    json.dumps({"name": name, "event": "start", "detail": data})
-                )
-            elif event == "done":
-                progress_events.append(
-                    json.dumps({"name": name, "event": "done", "detail": data})
-                )
+    def on_progress(name, event, data):
+        q.put(json.dumps({"name": name, "event": event, "detail": data}))
 
+    def run_in_thread():
         try:
             results = run_migration(source_client, target_client, objects, on_progress=on_progress)
+            q.put(json.dumps({"event": "complete", "status": "success", "results": results}))
         except Exception as e:
-            yield f"data: {json.dumps({'event': 'error', 'error': str(e)})}\n\n"
-            return
+            q.put(json.dumps({"event": "error", "error": str(e)}))
+        q.put(None)  # sentinel
 
-        # Yield all buffered progress events first, then the final complete event
-        for evt in progress_events:
-            yield f"data: {evt}\n\n"
+    threading.Thread(target=run_in_thread, daemon=True).start()
 
-        yield f"data: {json.dumps({'event': 'complete', 'status': 'success', 'results': results})}\n\n"
+    def event_stream():
+        while True:
+            item = q.get()
+            if item is None:
+                break
+            yield f"data: {item}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 

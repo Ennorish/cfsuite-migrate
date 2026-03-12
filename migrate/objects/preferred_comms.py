@@ -4,33 +4,19 @@ from simple_salesforce import Salesforce
 from migrate import etl, sf_api
 
 SOBJECT = "cfsuite1__CFSuite_Preferred_Comms_Config__c"
-FIELDS = [
-    "Name",
-    "RecordTypeId",
-    "cfsuite1__Active__c",
-    "cfsuite1__Description__c",
-    "cfsuite1__Events__c",
-    "cfsuite1__Included_Categories__c",
-    "cfsuite1__Excluded_Categories__c",
-    "cfsuite1__Record_Type_Names__c",
-    "cfsuite1__Status__c",
-]
 
 
 def migrate_preferred_comms(
     source_client: Salesforce, target_client: Salesforce
 ) -> dict:
-    """Migrate CFSuite__Preferred_Comms_Config__c records from source to target org.
+    """Migrate cfsuite1__CFSuite_Preferred_Comms_Config__c records from source to target org.
 
-    Steps:
-    1. Extract all records from source.
-    2. Remap RecordTypeIds by DeveloperName.
-    3. Skip records already present in target (matched by Name).
-    4. Insert remaining records.
+    Dynamically discovers createable fields shared between both orgs.
 
     Returns a dict with keys: extracted, skipped, inserted.
     """
-    records = etl.extract_records(source_client, SOBJECT, FIELDS)
+    fields = sf_api.get_shared_createable_fields(source_client, target_client, SOBJECT)
+    records = etl.extract_records(source_client, SOBJECT, fields)
     if not records:
         return {"extracted": 0, "skipped": 0, "inserted": 0}
 

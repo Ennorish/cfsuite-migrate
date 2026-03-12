@@ -5,42 +5,22 @@ import migrate.etl as etl
 import migrate.sf_api as sf_api
 
 _SOBJECT = "cfsuite1__CFSuite_Request_Flow__c"
-# Include Id so we can build a source_id -> name map for self-ref resolution.
-# Id is stripped before insert (Salesforce rejects it as a non-writable field).
-_FIELDS = [
-    "Id",
-    "Name",
-    "RecordTypeId",
-    "cfsuite1__Display_Category__c",
-    "cfsuite1__Category_Journey__c",
-    "cfsuite1__Entitlement_Process_Name__c",
-    "cfsuite1__Case_Record_Type_Developer_Name__c",
-    "cfsuite1__Case_Status__c",
-    "cfsuite1__Help_Text__c",
-    "cfsuite1__Is_Primary__c",
-    "cfsuite1__Is_Hidden_From_Community__c",
-    "cfsuite1__Category_Type__c",
-]
 _SELF_REF_FIELDS = ["cfsuite1__Display_Category__c", "cfsuite1__Category_Journey__c"]
 
 
 def migrate_request_flows(source_client: Salesforce, target_client: Salesforce) -> dict:
     """Extract cfsuite1__CFSuite_Request_Flow__c records from source and insert into target.
 
-    Steps:
-    1. Extract records (including Id) from source.
-    2. Build source_id -> name map for self-ref resolution.
-    3. Remap RecordTypeId from source to target by DeveloperName.
-    4. Skip records already in target by Name.
-    5. Two-pass insert to resolve both self-referential fields:
-       Pass 1 — insert all records with self-ref fields nulled (and Id stripped).
-       Pass 2 — for each record that had non-null self-ref values, update with
-                the resolved target IDs (source_id -> name -> new_target_id).
+    Dynamically discovers createable fields shared between both orgs.
+    Uses two-pass insert to resolve self-referential lookup fields.
 
     Returns:
         dict with keys: extracted (int), skipped (int), inserted (int)
     """
-    records = etl.extract_records(source_client, _SOBJECT, _FIELDS)
+    fields = sf_api.get_shared_createable_fields(
+        source_client, target_client, _SOBJECT, include_id=True
+    )
+    records = etl.extract_records(source_client, _SOBJECT, fields)
 
     if not records:
         return {"extracted": 0, "skipped": 0, "inserted": 0}

@@ -4,24 +4,6 @@ from simple_salesforce import Salesforce
 from migrate import etl, sf_api
 
 SOBJECT = "cfsuite1__Data_Settings__c"
-FIELDS = [
-    "Name",
-    "RecordTypeId",
-    "cfsuite1__Parent_Question__c",
-    "cfsuite1__CFSuite_Request_Flow__c",
-    "cfsuite1__Sort_Order__c",
-    "cfsuite1__Question__c",
-    "cfsuite1__Category__c",
-    "cfsuite1__Contact_Form_Type__c",
-    "cfsuite1__Guided_Request_Process_Name__c",
-    "cfsuite1__isDeflection__c",
-    "cfsuite1__Deflection_Text__c",
-    "cfsuite1__Deflection_URL__c",
-    "cfsuite1__Allow_Anonymous_Submission__c",
-    "cfsuite1__Search_Title__c",
-    "cfsuite1__Search_Tag__c",
-    "cfsuite1__Next_Step__c",
-]
 SELF_REF_FIELD = "cfsuite1__Parent_Question__c"
 CROSS_REF_FIELD = "cfsuite1__CFSuite_Request_Flow__c"
 
@@ -31,16 +13,15 @@ def migrate_community_requests(
 ) -> dict:
     """Migrate cfsuite1__Data_Settings__c records from source to target org.
 
-    Steps:
-    1. Extract all records from source.
-    2. Remap RecordTypeIds by DeveloperName.
-    3. Resolve cross-object cfsuite1__CFSuite_Request_Flow__c lookup by Name matching.
-    4. Skip records already present in target (matched by Name).
-    5. Insert remaining records via two-pass insert to resolve Parent_Question__c.
+    Dynamically discovers createable fields shared between both orgs.
+    Resolves cross-object Request Flow lookup and self-referential Parent_Question.
 
     Returns a dict with keys: extracted, skipped, inserted.
     """
-    records = etl.extract_records(source_client, SOBJECT, FIELDS)
+    fields = sf_api.get_shared_createable_fields(
+        source_client, target_client, SOBJECT, include_id=True
+    )
+    records = etl.extract_records(source_client, SOBJECT, fields)
     if not records:
         return {"extracted": 0, "skipped": 0, "inserted": 0}
 
@@ -64,7 +45,12 @@ def migrate_community_requests(
         return {"extracted": extracted_count, "skipped": skipped_count, "inserted": 0}
 
     # Step 5: Two-pass insert to resolve Parent_Question__c
-    etl.two_pass_insert(target_client, SOBJECT, to_insert, SELF_REF_FIELD, "Name")
+    # Name is auto-number on this object — must be stripped before insert
+    non_createable = sf_api.get_non_createable_fields(target_client, SOBJECT)
+    etl.two_pass_insert(
+        target_client, SOBJECT, to_insert, SELF_REF_FIELD, "Name",
+        skip_fields=non_createable,
+    )
 
     return {
         "extracted": extracted_count,
