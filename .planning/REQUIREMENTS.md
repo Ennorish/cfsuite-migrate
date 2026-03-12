@@ -15,8 +15,8 @@
 
 ### Authentication & Safety
 
-- [ ] **AUTH-01**: Script authenticates to orgs using SF CLI access tokens (no credential storage)
-- [ ] **AUTH-02**: Script blocks production orgs as migration targets (sandbox/scratch only)
+- [x] **AUTH-01**: Script authenticates to orgs using SF CLI access tokens (no credential storage)
+- [x] **AUTH-02**: Script blocks production orgs as migration targets (sandbox/scratch only)
 
 ### Data Migration
 
@@ -69,8 +69,8 @@
 | CLI-03 | Phase 1 | Pending |
 | CLI-04 | Phase 1 | Pending |
 | CLI-05 | Phase 3 | Pending |
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 2 | Pending |
 | DATA-03 | Phase 2 | Pending |
