@@ -1,5 +1,4 @@
 """Unit tests for migrate/prompts.py — org selection and object selection prompts."""
-import sys
 from unittest.mock import MagicMock, patch
 
 import pytest

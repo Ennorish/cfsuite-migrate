@@ -2,7 +2,7 @@
 import typer
 from rich.console import Console
 
-from migrate.auth import assert_not_production, get_credentials, list_orgs
+from migrate.auth import assert_not_production, list_orgs
 from migrate.models import ProductionOrgError, SFCLINotFoundError
 from migrate.prompts import select_objects, select_source_org, select_target_org
 
