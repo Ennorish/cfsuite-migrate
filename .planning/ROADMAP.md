@@ -12,7 +12,7 @@ Three phases deliver a working CLI migration tool. Phase 1 establishes the proje
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - CLI scaffold, SF CLI auth, interactive org selection, production org safety guard
+- [x] **Phase 1: Foundation** - CLI scaffold, SF CLI auth, interactive org selection, production org safety guard (completed 2026-03-12)
 - [ ] **Phase 2: Core ETL** - Full migration pipeline from extraction through two-pass self-referential insert
 - [ ] **Phase 3: Validation and Polish** - Post-migration count validation and real-time progress output
 
@@ -62,6 +62,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/2 | In Progress|  |
+| 1. Foundation | 2/2 | Complete   | 2026-03-12 |
 | 2. Core ETL | 0/TBD | Not started | - |
 | 3. Validation and Polish | 0/TBD | Not started | - |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation-01-01-PLAN.md
-last_updated: "2026-03-12T03:49:59.517Z"
+stopped_at: Completed 01-foundation-01-02-PLAN.md
+last_updated: "2026-03-12T03:53:31.415Z"
 last_activity: 2026-03-12 — Roadmap created, ready to begin planning Phase 1
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
   percent: 50
 ---
 
@@ -51,6 +51,7 @@ Progress: [█████░░░░░] 50%
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 18 | 2 tasks | 8 files |
+| Phase 01-foundation P02 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Recent decisions affecting current work:
 - Migrate Entitlements first: Request Flows reference Entitlements by name, need them present in target
 - [Phase 01-foundation]: Used pytest-subprocess callback lambda for FileNotFoundError test — FakeProcess.raise_exception() does not exist in v1.5.3
 - [Phase 01-foundation]: uv manages Python 3.11 runtime via .python-version — consistent interpreter across team despite system Python 3.14
+- [Phase 01-foundation]: Import migrate.auth as module (not from-import) so mock patches intercept calls at runtime
+- [Phase 01-foundation]: select_target_org exits with code 1 on ProductionOrgError — distinguishes user error from clean no-orgs exit
 
 ### Pending Todos
 
@@ -77,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T03:49:59.515Z
-Stopped at: Completed 01-foundation-01-01-PLAN.md
+Last session: 2026-03-12T03:53:31.412Z
+Stopped at: Completed 01-foundation-01-02-PLAN.md
 Resume file: None

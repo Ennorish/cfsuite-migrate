@@ -7,10 +7,10 @@
 
 ### CLI & User Experience
 
-- [ ] **CLI-01**: User can select source org from SF CLI authenticated orgs via interactive prompt
-- [ ] **CLI-02**: User can select target org from SF CLI authenticated orgs via interactive prompt
-- [ ] **CLI-03**: User can add a new org by being shown the `sf org login web` command to run
-- [ ] **CLI-04**: User can select individual objects to migrate or choose "all"
+- [x] **CLI-01**: User can select source org from SF CLI authenticated orgs via interactive prompt
+- [x] **CLI-02**: User can select target org from SF CLI authenticated orgs via interactive prompt
+- [x] **CLI-03**: User can add a new org by being shown the `sf org login web` command to run
+- [x] **CLI-04**: User can select individual objects to migrate or choose "all"
 - [ ] **CLI-05**: User sees progress output during migration (object being processed, record counts)
 
 ### Authentication & Safety
@@ -64,10 +64,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLI-01 | Phase 1 | Pending |
-| CLI-02 | Phase 1 | Pending |
-| CLI-03 | Phase 1 | Pending |
-| CLI-04 | Phase 1 | Pending |
+| CLI-01 | Phase 1 | Complete |
+| CLI-02 | Phase 1 | Complete |
+| CLI-03 | Phase 1 | Complete |
+| CLI-04 | Phase 1 | Complete |
 | CLI-05 | Phase 3 | Pending |
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
