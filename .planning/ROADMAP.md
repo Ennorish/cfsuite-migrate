@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - CLI scaffold, SF CLI auth, interactive org selection, production org safety guard (completed 2026-03-12)
 - [x] **Phase 2: Core ETL** - Full migration pipeline from extraction through two-pass self-referential insert (completed 2026-03-12)
-- [ ] **Phase 3: Validation and Polish** - Post-migration count validation and real-time progress output
+- [x] **Phase 3: Validation and Polish** - Post-migration count validation and real-time progress output (completed 2026-03-12)
 - [ ] **Phase 4: Web UI** - Local FastAPI web interface for seamless browser-based migration
 
 ## Phase Details
@@ -63,30 +63,30 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md — Progress callback in pipeline, rich live output, and post-migration validation summary table
+- [x] 03-01-PLAN.md — Progress callback in pipeline, rich live output, and post-migration validation summary table
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
 | 2. Core ETL | 4/4 | Complete | 2026-03-12 |
-| 3. Validation and Polish | 0/1 | Not started | - |
-| 4. Web UI | 0/TBD | Not started | - |
+| 3. Validation and Polish | 1/1 | Complete | 2026-03-12 |
+| 4. Web UI | 0/1 | Not started | - |
 
 ### Phase 4: Web UI
-**Goal**: Users can run `cfsuite-migrate serve` to launch a local browser-based migration wizard with searchable org picklists, color-coded sandbox/prod badges, object checkboxes, and live migration results
+**Goal**: Users can run `cfsuite-migrate serve` to launch a local browser-based 3-step migration wizard with side-by-side org selection, searchable picklists with sandbox/prod badges, object checkboxes, and per-object migration results
 **Depends on**: Phase 3
-**Requirements**: TBD
+**Requirements**: SC-1, SC-2, SC-3, SC-4
 **Success Criteria** (what must be TRUE):
   1. User runs `cfsuite-migrate serve` and a browser opens with the migration wizard
   2. Org dropdowns are searchable and clearly distinguish sandbox (green) from production (red) orgs
   3. Production orgs are blocked as targets with a visible warning
   4. Migration results display per-object extracted/skipped/inserted counts
-**Plans**: 0 plans
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 4 to break down)
+- [ ] 04-01-PLAN.md — Restructure index.html to 3-step wizard (side-by-side orgs, object checkboxes, review/run) and write test_web.py for full API route coverage
