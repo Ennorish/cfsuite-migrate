@@ -2,9 +2,11 @@
 import typer
 from rich.console import Console
 
-from migrate.auth import assert_not_production, list_orgs
+from migrate.auth import assert_not_production, get_credentials, list_orgs
 from migrate.models import ProductionOrgError, SFCLINotFoundError
+from migrate.pipeline import run_migration
 from migrate.prompts import select_objects, select_source_org, select_target_org
+from migrate.sf_api import build_client
 
 app = typer.Typer(
     name="cfsuite-migrate",
@@ -58,7 +60,28 @@ def migrate(
     console.print(f"\n[green]Source:[/green] {source_org.alias} ({source_org.username})")
     console.print(f"[green]Target:[/green] {target_org.alias} ({target_org.username})")
     console.print(f"[green]Objects:[/green] {', '.join(objects_to_migrate)}")
-    console.print("\n[yellow]Migration pipeline not yet implemented (Phase 2).[/yellow]")
+
+    try:
+        # Build Salesforce clients
+        source_creds = get_credentials(source_org.alias)
+        target_creds = get_credentials(target_org.alias)
+        source_client = build_client(source_creds)
+        target_client = build_client(target_creds)
+
+        # Run migration pipeline
+        console.print("\n[bold]Starting migration...[/bold]\n")
+        results = run_migration(source_client, target_client, objects_to_migrate)
+
+        # Display results
+        console.print("\n[bold green]Migration complete![/bold green]\n")
+        for r in results:
+            console.print(
+                f"  {r['object']}: {r['extracted']} extracted, "
+                f"{r['skipped']} skipped, {r['inserted']} inserted"
+            )
+    except Exception as e:
+        console.print(f"\n[red]Migration failed:[/red] {e}")
+        raise typer.Exit(1)
 
 
 def main() -> None:
