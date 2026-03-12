@@ -171,3 +171,144 @@ class TestRunMigrationEmptyList:
         mock_pc.assert_not_called()
 
         assert results == []
+
+
+class TestRunMigrationCallback:
+    """on_progress callback invocation behavior."""
+
+    def _make_patched_migrators(self, fake_results):
+        mocks = [MagicMock(return_value=r) for r in fake_results]
+        return [
+            ("Entitlement", mocks[0]),
+            ("CFSuite Request Flow", mocks[1]),
+            ("CFSuite Community Request", mocks[2]),
+            ("CFSuite Preferred Comms Config", mocks[3]),
+        ], mocks
+
+    def test_no_callback_works_as_before(self, mock_clients):
+        """Backward compat: no callback, no error."""
+        source, target = mock_clients
+        fake_results = [
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 2, "skipped": 0, "inserted": 2},
+            {"extracted": 3, "skipped": 0, "inserted": 3},
+            {"extracted": 4, "skipped": 0, "inserted": 4},
+        ]
+        patched, _ = self._make_patched_migrators(fake_results)
+        all_objects = [name for name, _ in patched]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched):
+            results = run_migration(source, target, all_objects)
+
+        assert len(results) == 4
+
+    def test_callback_called_start_before_migrator(self, mock_clients):
+        """Callback receives (name, 'start', {}) before migrator runs."""
+        source, target = mock_clients
+        events = []
+
+        def on_progress(name, event, data):
+            events.append((name, event, data))
+
+        fake_results = [
+            {"extracted": 5, "skipped": 0, "inserted": 5},
+            {"extracted": 3, "skipped": 1, "inserted": 2},
+            {"extracted": 7, "skipped": 2, "inserted": 5},
+            {"extracted": 4, "skipped": 0, "inserted": 4},
+        ]
+        patched, _ = self._make_patched_migrators(fake_results)
+        all_objects = [name for name, _ in patched]
+
+        # Track call order: inject side effect to verify start came before done
+        start_events_before_call = []
+
+        def make_side_effect(idx, name):
+            def side_effect(*_):
+                # At this point, start should already be in events
+                start_events_before_call.append(
+                    any(e[0] == name and e[1] == "start" for e in events)
+                )
+                return fake_results[idx]
+            return side_effect
+
+        for i, (name, mock_fn) in enumerate(patched):
+            mock_fn.side_effect = make_side_effect(i, name)
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched):
+            run_migration(source, target, all_objects, on_progress=on_progress)
+
+        assert all(start_events_before_call), "start event must fire before migrator runs"
+
+    def test_callback_called_done_after_migrator(self, mock_clients):
+        """Callback receives (name, 'done', result_dict) after migrator completes."""
+        source, target = mock_clients
+        events = []
+
+        def on_progress(name, event, data):
+            events.append((name, event, data))
+
+        fake_results = [
+            {"extracted": 5, "skipped": 0, "inserted": 5},
+            {"extracted": 3, "skipped": 1, "inserted": 2},
+            {"extracted": 7, "skipped": 2, "inserted": 5},
+            {"extracted": 4, "skipped": 0, "inserted": 4},
+        ]
+        patched, _ = self._make_patched_migrators(fake_results)
+        all_objects = [name for name, _ in patched]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched):
+            run_migration(source, target, all_objects, on_progress=on_progress)
+
+        done_events = [(name, data) for name, event, data in events if event == "done"]
+        assert len(done_events) == 4
+        assert done_events[0] == ("Entitlement", {"object": "Entitlement", **fake_results[0]})
+
+    def test_callback_events_in_dependency_order(self, mock_clients):
+        """Events arrive in OBJECT_MIGRATORS dependency order."""
+        source, target = mock_clients
+        event_names = []
+
+        def on_progress(name, event, *_):
+            if event == "start":
+                event_names.append(name)
+
+        fake_results = [
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+        ]
+        patched, _ = self._make_patched_migrators(fake_results)
+        all_objects = [name for name, _ in patched]
+        expected_order = [name for name, _ in patched]
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched):
+            run_migration(source, target, all_objects, on_progress=on_progress)
+
+        assert event_names == expected_order
+
+    def test_skipped_objects_do_not_trigger_callback(self, mock_clients):
+        """Objects not in selected list produce no callback events."""
+        source, target = mock_clients
+        events = []
+
+        def on_progress(name, event, data):
+            events.append((name, event, data))
+
+        fake_results = [
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+            {"extracted": 1, "skipped": 0, "inserted": 1},
+        ]
+        patched, _ = self._make_patched_migrators(fake_results)
+        selected = ["Entitlement"]  # Only one object selected
+
+        with patch("migrate.pipeline.OBJECT_MIGRATORS", patched):
+            run_migration(source, target, selected, on_progress=on_progress)
+
+        event_names = {name for name, _, _ in events}
+        assert event_names == {"Entitlement"}
+        assert "CFSuite Request Flow" not in event_names
+        assert "CFSuite Community Request" not in event_names
+        assert "CFSuite Preferred Comms Config" not in event_names
