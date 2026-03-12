@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: "Paused at checkpoint: 04-web-ui-04-01-PLAN.md Task 4 (human-verify)"
-last_updated: "2026-03-12T05:11:50.783Z"
+status: complete
+stopped_at: "Completed 04-web-ui-04-01-PLAN.md — all 4 tasks done, checkpoint approved"
+last_updated: "2026-03-12T05:30:00.000Z"
 last_activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 progress:
   total_phases: 4
@@ -88,6 +88,7 @@ Recent decisions affecting current work:
 - [Phase 03-validation-and-polish]: Simple console.print for live output (not rich.progress.Progress) — readable in non-TTY environments and easier to test
 - [Phase 04-web-ui]: Buffer SSE events synchronously during run_migration then flush — avoids thread complexity while delivering live per-object progress
 - [Phase 04-web-ui]: Error paths return JSONResponse before streaming; frontend checks content-type to distinguish error vs SSE response
+- [Phase 04-web-ui]: Arrow alignment fix applied via CSS flexbox centering on arrow glyph column — confirmed visually by user
 
 ### Roadmap Evolution
 
@@ -104,6 +105,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-12T05:11:50.780Z
-Stopped at: Paused at checkpoint: 04-web-ui-04-01-PLAN.md Task 4 (human-verify)
+Last session: 2026-03-12T05:30:00.000Z
+Stopped at: Completed 04-web-ui-04-01-PLAN.md — all tasks complete, Phase 4 done
 Resume file: None

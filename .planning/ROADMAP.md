@@ -89,4 +89,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 **Plans**: 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md — Restructure index.html to 3-step wizard (side-by-side orgs, object checkboxes, review/run) and write test_web.py for full API route coverage
+- [x] 04-01-PLAN.md — Restructure index.html to 3-step wizard (side-by-side orgs, object checkboxes, review/run) and write test_web.py for full API route coverage
