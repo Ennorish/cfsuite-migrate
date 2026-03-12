@@ -1,5 +1,5 @@
 """Tests for the request_flow object migrator."""
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -73,6 +73,7 @@ class TestMigrateRequestFlows:
         # Category Journey record referencing Display Category via CFSuite__Display_Category__c
         source_records = [
             {
+                "Id": "old-display-cat-id",
                 "Name": "Display Cat",
                 "RecordTypeId": "src-rt-001",
                 "CFSuite__Display_Category__c": None,
@@ -83,6 +84,7 @@ class TestMigrateRequestFlows:
                 "CFSuite__Entitlement_Name__c": "Ent-A",
             },
             {
+                "Id": "old-journey-id",
                 "Name": "Cat Journey",
                 "RecordTypeId": "src-rt-001",
                 "CFSuite__Display_Category__c": "old-display-cat-id",
