@@ -69,5 +69,5 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
-| 2. Core ETL | 1/4 | In progress | - |
+| 2. Core ETL | 3/4 | In Progress|  |
 | 3. Validation and Polish | 0/TBD | Not started | - |

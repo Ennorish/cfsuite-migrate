@@ -20,13 +20,13 @@
 
 ### Data Migration
 
-- [ ] **DATA-01**: Migrate Entitlement records with Account lookup resolution
-- [ ] **DATA-02**: Migrate CFSuite Request Flow records with Record Type ID mapping
-- [ ] **DATA-03**: Resolve Request Flow self-referential lookups (Category_Journey__c, Display_Category__c) via two-pass insert
-- [ ] **DATA-04**: Migrate CFSuite Community Request (Data_Settings__c) with Record Type ID mapping
-- [ ] **DATA-05**: Resolve Community Request self-referential lookup (Parent_Question__c) via two-pass insert
-- [ ] **DATA-06**: Resolve Community Request → Request Flow cross-object lookup
-- [ ] **DATA-07**: Migrate CFSuite Preferred Comms Config records with Record Type ID mapping
+- [x] **DATA-01**: Migrate Entitlement records with Account lookup resolution
+- [x] **DATA-02**: Migrate CFSuite Request Flow records with Record Type ID mapping
+- [x] **DATA-03**: Resolve Request Flow self-referential lookups (Category_Journey__c, Display_Category__c) via two-pass insert
+- [x] **DATA-04**: Migrate CFSuite Community Request (Data_Settings__c) with Record Type ID mapping
+- [x] **DATA-05**: Resolve Community Request self-referential lookup (Parent_Question__c) via two-pass insert
+- [x] **DATA-06**: Resolve Community Request → Request Flow cross-object lookup
+- [x] **DATA-07**: Migrate CFSuite Preferred Comms Config records with Record Type ID mapping
 - [x] **DATA-08**: Insert-only migration — skip records that already exist in target
 - [x] **DATA-09**: Enforce object insertion order: Entitlements → Request Flows → Community Requests → Preferred Comms
 
@@ -71,13 +71,13 @@
 | CLI-05 | Phase 3 | Pending |
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| DATA-01 | Phase 2 | Pending |
-| DATA-02 | Phase 2 | Pending |
-| DATA-03 | Phase 2 | Pending |
-| DATA-04 | Phase 2 | Pending |
-| DATA-05 | Phase 2 | Pending |
-| DATA-06 | Phase 2 | Pending |
-| DATA-07 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Complete |
+| DATA-02 | Phase 2 | Complete |
+| DATA-03 | Phase 2 | Complete |
+| DATA-04 | Phase 2 | Complete |
+| DATA-05 | Phase 2 | Complete |
+| DATA-06 | Phase 2 | Complete |
+| DATA-07 | Phase 2 | Complete |
 | DATA-08 | Phase 2 | Complete |
 | DATA-09 | Phase 2 | Complete |
 | VAL-01 | Phase 3 | Pending |
