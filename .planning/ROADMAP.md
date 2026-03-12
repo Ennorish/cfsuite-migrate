@@ -13,8 +13,9 @@ Three phases deliver a working CLI migration tool. Phase 1 establishes the proje
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - CLI scaffold, SF CLI auth, interactive org selection, production org safety guard (completed 2026-03-12)
-- [ ] **Phase 2: Core ETL** - Full migration pipeline from extraction through two-pass self-referential insert
+- [x] **Phase 2: Core ETL** - Full migration pipeline from extraction through two-pass self-referential insert (completed 2026-03-12)
 - [ ] **Phase 3: Validation and Polish** - Post-migration count validation and real-time progress output
+- [ ] **Phase 4: Web UI** - Local FastAPI web interface for seamless browser-based migration
 
 ## Phase Details
 
@@ -48,9 +49,9 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — ETL core engine (SF API wrapper, RecordType mapping, skip logic, two-pass insert)
-- [ ] 02-02-PLAN.md — Entitlement and Request Flow object migrators
-- [ ] 02-03-PLAN.md — Community Request and Preferred Comms Config object migrators
-- [ ] 02-04-PLAN.md — Pipeline orchestrator wiring all migrators into CLI with dependency ordering
+- [x] 02-02-PLAN.md — Entitlement and Request Flow object migrators
+- [x] 02-03-PLAN.md — Community Request and Preferred Comms Config object migrators
+- [x] 02-04-PLAN.md — Pipeline orchestrator wiring all migrators into CLI with dependency ordering
 
 ### Phase 3: Validation and Polish
 **Goal**: Users receive confirmation that migration succeeded with record counts and real-time progress during the migration run
@@ -69,5 +70,20 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
-| 2. Core ETL | 3/4 | In Progress|  |
+| 2. Core ETL | 4/4 | Complete | 2026-03-12 |
 | 3. Validation and Polish | 0/TBD | Not started | - |
+| 4. Web UI | 0/TBD | Not started | - |
+
+### Phase 4: Web UI
+**Goal**: Users can run `cfsuite-migrate serve` to launch a local browser-based migration wizard with searchable org picklists, color-coded sandbox/prod badges, object checkboxes, and live migration results
+**Depends on**: Phase 3
+**Requirements**: TBD
+**Success Criteria** (what must be TRUE):
+  1. User runs `cfsuite-migrate serve` and a browser opens with the migration wizard
+  2. Org dropdowns are searchable and clearly distinguish sandbox (green) from production (red) orgs
+  3. Production orgs are blocked as targets with a visible warning
+  4. Migration results display per-object extracted/skipped/inserted counts
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 4 to break down)

@@ -82,9 +82,13 @@ Recent decisions affecting current work:
 - [Phase 02-core-etl]: Custom two-pass flow for request_flow (not etl.two_pass_insert) — two self-ref fields handled with single pass-1 insert then collected pass-2 updates per record
 - [Phase 02-core-etl]: Patch migrate.pipeline.OBJECT_MIGRATORS in tests (not module functions) - function refs are bound at import time in list-of-tuples
 
+### Roadmap Evolution
+
+- Phase 4 added: Web UI — local FastAPI web interface for browser-based migration
+
 ### Pending Todos
 
-None yet.
+1 pending — /gsd:check-todos to review
 
 ### Blockers/Concerns
 
