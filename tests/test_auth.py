@@ -86,7 +86,10 @@ def test_list_orgs_two_orgs(fp: FakeProcess) -> None:
 
 def test_list_orgs_sf_cli_not_found(fp: FakeProcess) -> None:
     """list_orgs() raises SFCLINotFoundError when sf CLI is not installed."""
-    fp.register(["sf", "org", "list", "--json"], callback=FakeProcess.raise_exception(FileNotFoundError))
+    def _raise_file_not_found(process: object) -> None:
+        raise FileNotFoundError("No such file or directory: 'sf'")
+
+    fp.register(["sf", "org", "list", "--json"], callback=_raise_file_not_found)
     with pytest.raises(SFCLINotFoundError):
         list_orgs()
 
