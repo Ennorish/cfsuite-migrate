@@ -28,7 +28,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can select individual objects to migrate or choose "all" from a menu
   4. User is shown the `sf org login web` command to add a new org when their desired org is not in the list
   5. All authentication uses SF CLI access tokens — no credentials are stored by the script
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project scaffold (pyproject.toml, uv) and SF CLI auth layer (list_orgs, get_credentials, production guard)
+- [ ] 01-02-PLAN.md — Interactive CLI prompts (org selection, object selection) wired to Typer entry point
 
 ### Phase 2: Core ETL
 **Goal**: All four CFSuite objects migrate from source to target with record relationships intact, self-referential hierarchies preserved, and existing records in the target skipped
@@ -58,6 +62,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/2 | Not started | - |
 | 2. Core ETL | 0/TBD | Not started | - |
 | 3. Validation and Polish | 0/TBD | Not started | - |
