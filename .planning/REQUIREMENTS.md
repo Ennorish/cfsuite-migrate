@@ -27,8 +27,8 @@
 - [ ] **DATA-05**: Resolve Community Request self-referential lookup (Parent_Question__c) via two-pass insert
 - [ ] **DATA-06**: Resolve Community Request → Request Flow cross-object lookup
 - [ ] **DATA-07**: Migrate CFSuite Preferred Comms Config records with Record Type ID mapping
-- [ ] **DATA-08**: Insert-only migration — skip records that already exist in target
-- [ ] **DATA-09**: Enforce object insertion order: Entitlements → Request Flows → Community Requests → Preferred Comms
+- [x] **DATA-08**: Insert-only migration — skip records that already exist in target
+- [x] **DATA-09**: Enforce object insertion order: Entitlements → Request Flows → Community Requests → Preferred Comms
 
 ### Validation
 
@@ -78,8 +78,8 @@
 | DATA-05 | Phase 2 | Pending |
 | DATA-06 | Phase 2 | Pending |
 | DATA-07 | Phase 2 | Pending |
-| DATA-08 | Phase 2 | Pending |
-| DATA-09 | Phase 2 | Pending |
+| DATA-08 | Phase 2 | Complete |
+| DATA-09 | Phase 2 | Complete |
 | VAL-01 | Phase 3 | Pending |
 
 **Coverage:**

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Completed 01-foundation-01-02-PLAN.md
-last_updated: "2026-03-12T03:54:12.017Z"
-last_activity: 2026-03-12 — Roadmap created, ready to begin planning Phase 1
+status: in_progress
+stopped_at: Completed 02-core-etl-02-01-PLAN.md
+last_updated: "2026-03-12T04:10:19Z"
+last_activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 progress:
   total_phases: 3
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
-  percent: 50
+  total_plans: 3
+  completed_plans: 3
+  percent: 60
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-12)
 
 **Core value:** Reliably migrate CFSuite configuration objects between orgs with all record relationships intact
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Core ETL
 
 ## Current Position
 
-Phase: 1 of 3 (Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-12 — Roadmap created, ready to begin planning Phase 1
+Phase: 2 of 3 (Core ETL)
+Plan: 1 of TBD in current phase
+Status: In progress
+Last activity: 2026-03-12 — Completed 02-01 core ETL engine (sf_api + etl modules)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [█████░░░░░] 50%
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 18 | 2 tasks | 8 files |
 | Phase 01-foundation P02 | 2 | 2 tasks | 3 files |
+| Phase 02-core-etl P01 | 20 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,10 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: uv manages Python 3.11 runtime via .python-version — consistent interpreter across team despite system Python 3.14
 - [Phase 01-foundation]: Import migrate.auth as module (not from-import) so mock patches intercept calls at runtime
 - [Phase 01-foundation]: select_target_org exits with code 1 on ProductionOrgError — distinguishes user error from clean no-orgs exit
+- [Phase 02-core-etl]: getattr(client.bulk, sobject) for dynamic bulk SObject access — matches simple-salesforce attribute-access design
+- [Phase 02-core-etl]: two_pass_insert uses single-record update for pass 2 (not a second bulk call) — children are a small subset
+- [Phase 02-core-etl]: remap_record_types mutates records in place, returns None — consistent ETL mutation pattern
+- [Phase 02-core-etl]: find_existing_keys short-circuits on empty key_values — avoids invalid SOQL with empty IN clause
 
 ### Pending Todos
 
@@ -80,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T03:53:31.412Z
-Stopped at: Completed 01-foundation-01-02-PLAN.md
+Last session: 2026-03-12T04:10:19Z
+Stopped at: Completed 02-core-etl-02-01-PLAN.md
 Resume file: None

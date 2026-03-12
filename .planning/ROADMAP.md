@@ -47,7 +47,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — ETL core engine (SF API wrapper, RecordType mapping, skip logic, two-pass insert)
+- [x] 02-01-PLAN.md — ETL core engine (SF API wrapper, RecordType mapping, skip logic, two-pass insert)
 - [ ] 02-02-PLAN.md — Entitlement and Request Flow object migrators
 - [ ] 02-03-PLAN.md — Community Request and Preferred Comms Config object migrators
 - [ ] 02-04-PLAN.md — Pipeline orchestrator wiring all migrators into CLI with dependency ordering
@@ -69,5 +69,5 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-12 |
-| 2. Core ETL | 0/4 | Not started | - |
+| 2. Core ETL | 1/4 | In progress | - |
 | 3. Validation and Polish | 0/TBD | Not started | - |
