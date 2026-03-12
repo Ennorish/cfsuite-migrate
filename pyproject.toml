@@ -1,0 +1,26 @@
+[project]
+name = "cfsuite-migrate"
+version = "0.1.0"
+description = "CFSuite configuration data migration tool for Salesforce orgs"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.24",
+    "simple-salesforce>=1.12.9",
+    "questionary>=2.1.1",
+    "rich>=14.0",
+]
+
+[project.scripts]
+cfsuite-migrate = "migrate.main:app"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-subprocess>=1.5",
+    "ruff>=0.15.5",
+]
