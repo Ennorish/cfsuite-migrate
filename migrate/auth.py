@@ -49,9 +49,10 @@ def list_orgs() -> list[OrgInfo]:
             f"sf org list returned invalid JSON: {exc}. Raw output: {result.stdout[:300]}"
         ) from exc
     alias_map = _get_alias_map()
-    all_orgs = data.get("result", {}).get("nonScratchOrgs", []) + data.get(
-        "result", {}
-    ).get("scratchOrgs", [])
+    result_block = data.get("result", {})
+    all_orgs = []
+    for key in ("nonScratchOrgs", "scratchOrgs", "other", "sandboxes", "devHubs"):
+        all_orgs.extend(result_block.get(key, []))
     seen = set()
     org_list = []
     for org in all_orgs:
