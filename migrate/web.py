@@ -32,6 +32,8 @@ def get_orgs():
         orgs = list_orgs()
     except SFCLINotFoundError as e:
         return JSONResponse({"error": str(e)}, status_code=500)
+    except Exception as e:
+        return JSONResponse({"error": f"Failed to list orgs: {e}"}, status_code=500)
     return [asdict(o) for o in orgs]
 
 
@@ -62,6 +64,8 @@ def do_migrate(payload: dict):
         orgs = list_orgs()
     except SFCLINotFoundError as e:
         return JSONResponse({"error": str(e)}, status_code=500)
+    except Exception as e:
+        return JSONResponse({"error": f"Failed to list orgs: {e}"}, status_code=500)
 
     target_org = next((o for o in orgs if o.alias == target_alias), None)
     if target_org is None:

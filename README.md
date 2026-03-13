@@ -33,7 +33,7 @@ Built for Ennovative's CFSuite managed package (`cfsuite1__`) — handles Record
 ## Prerequisites
 
 - **Python 3.11+** — [python.org/downloads](https://www.python.org/downloads/)
-- **Salesforce CLI** (`sf`) — [Install guide](https://developer.salesforce.com/tools/salesforcecli)
+- **Salesforce CLI v2** (`sf`) — any v2.x release. Check with `sf --version`. [Install guide](https://developer.salesforce.com/tools/salesforcecli). Note: the legacy `sfdx` CLI (v7) is not supported.
 - **CFSuite managed package** (`cfsuite1__`) installed in both source and target orgs
 
 ## Quick start

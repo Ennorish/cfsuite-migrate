@@ -37,7 +37,17 @@ def list_orgs() -> list[OrgInfo]:
         raise SFCLINotFoundError(
             "sf CLI not found. Install from: https://developer.salesforce.com/tools/salesforcecli"
         )
-    data = json.loads(result.stdout)
+    if result.returncode != 0:
+        stderr = (result.stderr or "").strip()
+        raise RuntimeError(
+            f"sf org list failed (exit {result.returncode}): {stderr or result.stdout[:200]}"
+        )
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            f"sf org list returned invalid JSON: {exc}. Raw output: {result.stdout[:300]}"
+        ) from exc
     alias_map = _get_alias_map()
     all_orgs = data.get("result", {}).get("nonScratchOrgs", []) + data.get(
         "result", {}
